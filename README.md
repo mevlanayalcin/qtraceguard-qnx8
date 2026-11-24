@@ -3,9 +3,11 @@
 [![QTraceGuard QNX 8.0 Determinism CI](https://github.com/mevlanayalcin/qtraceguard-qnx8/actions/workflows/qnx-ci.yml/badge.svg)](https://github.com/mevlanayalcin/qtraceguard-qnx8/actions/workflows/qnx-ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![QNX OS 8.0 Verified](https://img.shields.io/badge/QNX_OS_8.0-Live_KVM_Verified-10b981.svg)](benchmarks/QNX8_KVM_BENCHMARK.md)
+[![YouTube Demo (2:50 1080p60)](https://img.shields.io/badge/YouTube-Demo_Video_(2:50)-ef4444.svg)](https://youtu.be/Xdu6b2quC8E)
 
 **Fail-Closed QNX OS 8.0 Kernel Trace (`.kev`) Verifier · Compiler-Verified AI Patch Copilot · Interactive HTML5/SVG Trace Studio · QEMU/KVM CI Harness · 7-Module Codelab**
 
+> **Watch the 2:50 1080p60 Demo Video:** https://youtu.be/Xdu6b2quC8E  
 > Built for the **Devpost QNX Global Hackathon 2026** — targeting **Developer Tooling and Host Tools**, **Best Use of QNX-specific Technologies**, and **Best Codelab or Tutorial**.  
 > **Verified live on real QNX OS 8.0 (`QNX noname 8.0.0 2026/10/30-09:10:05EDT x86pc`, `procnto-smp-instr` 2.8.0) under 4-vCPU KVM**, cross-compiled with real QNX SDP 8.0 `qcc` (`x86_64` & `aarch64le`, `-Wall -Wextra -Werror`, 0 warnings).  
 > **100% MIT-licensed clean-room source** — redistributes **zero** proprietary BlackBerry QNX SDK headers, libraries, or OS images.
