@@ -1,0 +1,11 @@
+{
+  "tool": "qtg-probe",
+  "qnx_native": true,
+  "kernel_release": "QNX 8.0.0 (x86pc)",
+  "aps_supported": false,
+  "aps_errno": 89,
+  "sporadic_supported": true,
+  "has_aid_priority": true,
+  "max_unpriv_priority": 63,
+  "ipc_bench": {"iters": 1000, "succeeded": 1000, "p50_ns": 2480, "p99_ns": 205422, "max_ns": 3785810}
+}

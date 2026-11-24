@@ -1,0 +1,11 @@
+{
+  "max_dispatch_latency_us": 250,
+  "max_p99_dispatch_latency_us": 150,
+  "max_ipc_rtt_us": 2000,
+  "max_prio_inversion_us": 100,
+  "max_deadlock_cycles": 0,
+  "max_pulse_backlog": 16,
+  "forbid_fixed_priority_inversion": true,
+  "forbid_aid_priority_cap": true,
+  "forbid_aps_bankruptcy": true
+}

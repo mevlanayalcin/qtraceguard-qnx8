@@ -1,0 +1,67 @@
+name: QTraceGuard QNX 8.0 Determinism CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  security-events: write
+
+env:
+  OMP_NUM_THREADS: "4"
+
+jobs:
+  verify-determinism:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Host Tools & Verify QNX OS 8.0 #ifdef __QNX__ API Compilation
+        run: |
+          make host
+          make qnx-compile-check
+
+      - name: Run C11 Unit (13 tests), Live QNX 8.0 Trace Regression & E2E Tests
+        run: make test
+
+      - name: Run AddressSanitizer & UndefinedBehaviorSanitizer
+        run: make asan
+
+      - name: Run LibFuzzer + ASan + UBSan on .kev, traceprinter & JSON/SARIF (Real QNX 8.0 Seeds)
+        run: make fuzz FUZZ_TIME=10
+
+      - name: Run Full Deterministic SLA Verification Suite & Compiler-Verified AI Patch Generation
+        run: |
+          ./qemu/qnx800_harness.sh --sim-ci
+          for s in healthy deadlock prio-inversion aid-cap pulse-storm; do
+            ./build/qtraceguard analyze samples/qnx8_live/qnx8_${s}.kev \
+              --policy qemu/sla_policy.json --focus qtg \
+              --json out/qnx8_${s}.json --sarif out/qnx8_${s}.sarif --no-color > /dev/null
+            python3 tools/qtg_report.py out/qnx8_${s}.json out/qnx8_${s}.html
+            python3 tools/qtg_ai_patch.py out/qnx8_${s}.json \
+              --out-md out/qnx8_${s}_patch.md --out-json out/qnx8_${s}_patch.json --verify-cc
+          done
+
+      - name: Upload Live QNX 8.0 Deadlock SARIF 2.1.0 to GitHub Code Scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
+        with:
+          sarif_file: out/qnx8_deadlock.sarif
+          category: qtraceguard-qnx8-deadlock
+
+      - name: Upload Interactive HTML5/SVG Trace Studios, AI Patches & SARIF Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: qtraceguard-reports
+          path: |
+            out/ci_*.html
+            out/ci_*.json
+            out/ci_*.sarif
+            out/qnx8_*.html
+            out/qnx8_*.json
+            out/qnx8_*.sarif
+            out/qnx8_*_patch.md
+            out/qnx8_*_patch.json

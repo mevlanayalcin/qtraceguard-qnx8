@@ -1,0 +1,57 @@
+# QTraceGuard Clean-Room QNX OS 8.0 IFS Buildfile Snippet (for QEMU x86_64)
+# SPDX-License-Identifier: MIT
+#
+# NOTE: This buildfile contains ZERO proprietary QNX binaries. It references
+# standard QNX SDP 8.0 components installed locally under $QNX_TARGET via your
+# own myQNX / QNX Everywhere license.
+#
+# Key QNX OS 8.0 architectural details:
+#  1. Uses `procnto-smp-instr` (instrumented microkernel) so `tracelogger` can
+#     capture kernel IPC / thread / priority events into `/dev/shmem/*.kev`.
+#  2. Intentionally OMITS legacy `[module=aps]` because QNX OS 8.0 removed the
+#     Adaptive Partitioning Scheduler (SchedCtl APS returns ENOSYS) in favor of
+#     its linearly scalable multi-core scheduler + SCHED_SPORADIC + runtime clocks.
+#  3. Includes `tracelogger`, `traceprinter`, `pidin`, `qtg-resmgr-node`, and `qtg-probe`.
+
+[virtual=x86_64,bios +compress] .bootstrap = {
+    startup-x86 -v
+    PATH=/proc/boot:/bin:/usr/bin LD_LIBRARY_PATH=/proc/boot:/lib:/usr/lib procnto-smp-instr -v
+}
+
+[+script] .script = {
+    procmgr_symlink ../../proc/boot/libc.so.6 /usr/lib/ldqnx-64.so.2
+    display_msg "=== QNX OS 8.0 Instrumented Microkernel (QTraceGuard QEMU Target) ==="
+
+    slogger2 &
+    pipe &
+    random -p
+
+    # Start network & SSH (when running under mkqnximage QEMU target)
+    # Wait for /dev/shmem to be ready for zero-copy tracelogger buffers
+    waitfor /dev/shmem 4
+
+    # Run initial QNX 8.0 capability probe (verifies APS ENOSYS + SCHED_SPORADIC + IPC bench)
+    /proc/boot/qtg-probe
+
+    # Launch interactive console shell
+    reopen /dev/ser1
+    [+session] ksh &
+}
+
+[type=link] /bin/sh=/proc/boot/ksh
+[type=link] /tmp=/dev/shmem
+
+# Standard QNX SDP 8.0 target binaries resolved from $QNX_TARGET at mkifs time
+libc.so
+libm.so
+ksh
+slogger2
+pipe
+random
+pidin
+tracelogger
+traceprinter
+
+# QTraceGuard cross-compiled open-source binaries (built via `make qnx-x86_64`)
+[perms=0755] /proc/boot/qtg-resmgr-node=build-qnx-x86_64/qtg-resmgr-node
+[perms=0755] /proc/boot/qtg-probe=build-qnx-x86_64/qtg-probe
