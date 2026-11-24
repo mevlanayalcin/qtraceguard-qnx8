@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 QTraceGuard Contributors
+Copyright (c) 2026 Mevlana Yalcin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,11 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-Clean-Room & QNX Licensing Notice:
-This repository contains solely original open-source code written from public
-documentation. It does NOT include, bundle, or redistribute any proprietary
-BlackBerry QNX SDP 8.0 binaries, headers, libraries, or OS images. To compile
-the target binaries for QNX OS 8.0 or boot QNX 8.0 under QEMU, obtain a valid
-QNX SDP 8.0 license (e.g., free non-commercial QNX Everywhere via myQNX).
